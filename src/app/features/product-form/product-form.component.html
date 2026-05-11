@@ -149,6 +149,7 @@
             class="field-input"
             formControlName="date_revision"
             [class.input-error]="isInvalid('date_revision')"
+            [class.input-disabled]="true"
           />
           <div class="field-hint">Debe ser exactamente 1 año después de la fecha de liberación.</div>
           <div class="error-msg" *ngIf="hasError('date_revision', 'required')">Este campo es requerido.</div>

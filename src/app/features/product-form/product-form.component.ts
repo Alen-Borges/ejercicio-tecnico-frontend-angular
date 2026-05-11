@@ -96,7 +96,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(200)]],
       logo: ['', Validators.required],
       date_release: ['', [Validators.required, minTodayValidator()]],
-      date_revision: ['', [Validators.required, reviseDateValidator('date_release')]]
+      date_revision: [{ value: '', disabled: true }, [Validators.required, reviseDateValidator('date_release')]]
     });
   }
 

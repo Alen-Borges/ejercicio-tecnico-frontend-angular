@@ -105,12 +105,14 @@ export class ProductListComponent implements OnInit {
     if (this.openDropdownId === id) {
       this.openDropdownId = null;
     } else {
-      const btn = event.currentTarget as HTMLElement;
-      const rect = btn.getBoundingClientRect();
-      this.dropdownPosition = {
-        top: rect.bottom + 4,
-        right: window.innerWidth - rect.right
-      };
+      const btn = event.currentTarget as HTMLElement | null;
+      if (btn) {
+        const rect = btn.getBoundingClientRect();
+        this.dropdownPosition = {
+          top: rect.bottom + 4,
+          right: window.innerWidth - rect.right
+        };
+      }
       this.openDropdownId = id;
     }
   }
