@@ -28,6 +28,7 @@ export class ProductListComponent implements OnInit {
 
   // F5/F6 — Dropdown + modal
   openDropdownId: string | null = null;
+  dropdownPosition = { top: 0, right: 0 };
   selectedProduct: Product | null = null;
 
   constructor(
@@ -101,7 +102,17 @@ export class ProductListComponent implements OnInit {
   // F5 — Dropdown toggle
   toggleDropdown(id: string, event: MouseEvent): void {
     event.stopPropagation();
-    this.openDropdownId = this.openDropdownId === id ? null : id;
+    if (this.openDropdownId === id) {
+      this.openDropdownId = null;
+    } else {
+      const btn = event.currentTarget as HTMLElement;
+      const rect = btn.getBoundingClientRect();
+      this.dropdownPosition = {
+        top: rect.bottom + 4,
+        right: window.innerWidth - rect.right
+      };
+      this.openDropdownId = id;
+    }
   }
 
   @HostListener('document:click')

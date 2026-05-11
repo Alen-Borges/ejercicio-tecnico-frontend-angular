@@ -83,6 +83,12 @@
                   class="dropdown-menu"
                   *ngIf="openDropdownId === product.id"
                   role="menu"
+                  [ngStyle]="{
+                    position: 'fixed',
+                    top: dropdownPosition.top + 'px',
+                    right: dropdownPosition.right + 'px',
+                    left: 'auto'
+                  }"
                 >
                   <button
                     class="dropdown-item"
