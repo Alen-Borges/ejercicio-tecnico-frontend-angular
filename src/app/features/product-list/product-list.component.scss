@@ -106,19 +106,9 @@ $shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
   max-width: 380px;
 }
 
-.search-icon {
-  position: absolute;
-  left: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.85rem;
-  color: $text-muted;
-  pointer-events: none;
-}
-
 .search-input {
   width: 100%;
-  padding: 0.6rem 0.75rem 0.6rem 2.2rem;
+  padding: 0.6rem 0.75rem;
   border: 1.5px solid $border;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -341,18 +331,67 @@ $shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
   small { font-size: 0.85rem; }
 }
 
-// -- Results counter
-.results-counter {
+
+.total-hint {
+  color: #aaa;
+}
+
+// -- Table footer (pagination + counter)
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-page {
+  background: #fff;
+  border: 1.5px solid $border;
+  border-radius: 6px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: $text-main;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover:not(:disabled) {
+    background: $primary;
+    border-color: $primary-dark;
+  }
+
+  &:disabled {
+    opacity: 0.38;
+    cursor: default;
+  }
+}
+
+.page-info {
+  font-size: 0.82rem;
+  color: $text-muted;
+  padding: 0 0.25rem;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.results-counter {
   font-size: 0.85rem;
   color: $text-muted;
   display: flex;
   gap: 0.4rem;
   align-items: center;
-}
-
-.total-hint {
-  color: #aaa;
 }
 
 // -- Responsive
