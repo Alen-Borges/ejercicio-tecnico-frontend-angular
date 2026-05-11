@@ -1,0 +1,183 @@
+<div class="page-container">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-brand">
+      <div class="logo-mark">BP</div>
+      <span class="brand-name">Banco</span>
+    </div>
+  </header>
+
+  <main class="card">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Navegación">
+      <button class="btn-back" (click)="goBack()" type="button">← Volver</button>
+      <span class="sep">·</span>
+      <span class="crumb-current">
+        {{ isEditMode ? 'Editar Producto' : 'Agregar Producto Financiero' }}
+      </span>
+    </nav>
+
+    <h1 class="card-title">
+      {{ isEditMode ? 'Editar Producto Financiero' : 'Formulario de Registro' }}
+    </h1>
+
+    <!-- Loading skeleton (edit mode) -->
+    <div *ngIf="loading" class="loading-placeholder">
+      <div class="skel-row" *ngFor="let i of [1,2,3,4,5,6]">
+        <div class="skel-label pulse"></div>
+        <div class="skel-input pulse"></div>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div *ngIf="errorMessage" class="alert alert-error" role="alert">
+      ⚠ {{ errorMessage }}
+      <button class="alert-close" (click)="errorMessage = ''">✕</button>
+    </div>
+
+    <!-- Form -->
+    <form
+      *ngIf="!loading"
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      novalidate
+      class="product-form"
+    >
+      <!-- Row 1: ID + Name -->
+      <div class="form-row">
+        <!-- ID -->
+        <div class="form-field" [class.has-error]="isInvalid('id')">
+          <label class="field-label" for="field-id">
+            ID <span class="required">*</span>
+          </label>
+          <input
+            id="field-id"
+            type="text"
+            class="field-input"
+            formControlName="id"
+            placeholder="ej: trj-crd"
+            [class.input-error]="isInvalid('id')"
+            [class.input-disabled]="isEditMode"
+          />
+          <div class="field-hint">Mínimo 3, máximo 10 caracteres.</div>
+          <div class="error-msg" *ngIf="hasError('id', 'required')">Este campo es requerido.</div>
+          <div class="error-msg" *ngIf="hasError('id', 'minlength')">Mínimo 3 caracteres.</div>
+          <div class="error-msg" *ngIf="hasError('id', 'maxlength')">Máximo 10 caracteres.</div>
+          <div class="error-msg" *ngIf="hasError('id', 'idExists')">El ID ya está registrado.</div>
+          <div class="validating-msg" *ngIf="f['id'].pending">Verificando disponibilidad...</div>
+        </div>
+
+        <!-- Name -->
+        <div class="form-field" [class.has-error]="isInvalid('name')">
+          <label class="field-label" for="field-name">
+            Nombre <span class="required">*</span>
+          </label>
+          <input
+            id="field-name"
+            type="text"
+            class="field-input"
+            formControlName="name"
+            placeholder="ej: Tarjetas de Crédito"
+            [class.input-error]="isInvalid('name')"
+          />
+          <div class="error-msg" *ngIf="hasError('name', 'required')">Este campo es requerido.</div>
+          <div class="error-msg" *ngIf="hasError('name', 'minlength')">Mínimo 5 caracteres.</div>
+          <div class="error-msg" *ngIf="hasError('name', 'maxlength')">Máximo 100 caracteres.</div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-field full-width" [class.has-error]="isInvalid('description')">
+        <label class="field-label" for="field-description">
+          Descripción <span class="required">*</span>
+        </label>
+        <textarea
+          id="field-description"
+          class="field-input field-textarea"
+          formControlName="description"
+          placeholder="ej: Tarjeta de consumo bajo la modalidad de crédito"
+          rows="3"
+          [class.input-error]="isInvalid('description')"
+        ></textarea>
+        <div class="error-msg" *ngIf="hasError('description', 'required')">Este campo es requerido.</div>
+        <div class="error-msg" *ngIf="hasError('description', 'minlength')">Mínimo 10 caracteres.</div>
+        <div class="error-msg" *ngIf="hasError('description', 'maxlength')">Máximo 200 caracteres.</div>
+      </div>
+
+      <!-- Logo -->
+      <div class="form-field full-width" [class.has-error]="isInvalid('logo')">
+        <label class="field-label" for="field-logo">
+          Logo (URL) <span class="required">*</span>
+        </label>
+        <input
+          id="field-logo"
+          type="text"
+          class="field-input"
+          formControlName="logo"
+          placeholder="https://..."
+          [class.input-error]="isInvalid('logo')"
+        />
+        <div class="error-msg" *ngIf="hasError('logo', 'required')">Este campo es requerido.</div>
+      </div>
+
+      <!-- Row 2: dates -->
+      <div class="form-row">
+        <!-- Date release -->
+        <div class="form-field" [class.has-error]="isInvalid('date_release')">
+          <label class="field-label" for="field-date-release">
+            Fecha de Liberación <span class="required">*</span>
+          </label>
+          <input
+            id="field-date-release"
+            type="date"
+            class="field-input"
+            formControlName="date_release"
+            [class.input-error]="isInvalid('date_release')"
+          />
+          <div class="error-msg" *ngIf="hasError('date_release', 'required')">Este campo es requerido.</div>
+          <div class="error-msg" *ngIf="hasError('date_release', 'pastDate')">La fecha debe ser igual o mayor a hoy.</div>
+        </div>
+
+        <!-- Date revision -->
+        <div class="form-field" [class.has-error]="isInvalid('date_revision')">
+          <label class="field-label" for="field-date-revision">
+            Fecha de Revisión <span class="required">*</span>
+          </label>
+          <input
+            id="field-date-revision"
+            type="date"
+            class="field-input"
+            formControlName="date_revision"
+            [class.input-error]="isInvalid('date_revision')"
+          />
+          <div class="field-hint">Debe ser exactamente 1 año después de la fecha de liberación.</div>
+          <div class="error-msg" *ngIf="hasError('date_revision', 'required')">Este campo es requerido.</div>
+          <div class="error-msg" *ngIf="hasError('date_revision', 'invalidReviseDate')">
+            Debe ser exactamente 1 año después de la fecha de liberación.
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn-reset"
+          (click)="onReset()"
+          id="btn-reset"
+        >
+          Reiniciar
+        </button>
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="submitting"
+          id="btn-submit"
+        >
+          <span *ngIf="!submitting">{{ isEditMode ? 'Editar' : 'Agregar' }}</span>
+          <span *ngIf="submitting" class="spinner"></span>
+        </button>
+      </div>
+    </form>
+  </main>
+</div>

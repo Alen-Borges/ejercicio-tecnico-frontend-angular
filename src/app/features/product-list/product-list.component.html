@@ -1,0 +1,149 @@
+<div class="page-container">
+  <!-- Header -->
+  <header class="page-header">
+    <div class="header-brand">
+      <div class="logo-mark">BP</div>
+      <span class="brand-name">Banco</span>
+    </div>
+    <button class="btn-primary" (click)="goToAdd()" id="btn-add-product">
+      + Agregar
+    </button>
+  </header>
+
+  <!-- Card -->
+  <main class="card">
+    <h1 class="card-title">Listado de Productos Financieros</h1>
+
+    <!-- Toolbar: search + page size -->
+    <div class="toolbar">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input
+          id="input-search"
+          class="search-input"
+          type="text"
+          placeholder="Buscar..."
+          [value]="searchTerm"
+          (input)="onSearchChange($any($event.target).value)"
+          aria-label="Buscar productos"
+        />
+      </div>
+      <div class="pagesize-wrapper">
+        <select
+          id="select-page-size"
+          class="select-pagesize"
+          [value]="pageSize"
+          (change)="onPageSizeChange($any($event.target).value)"
+          aria-label="Cantidad de registros"
+        >
+          <option *ngFor="let s of pageSizes" [value]="s">{{ s }}</option>
+        </select>
+        <span class="results-label">resultados</span>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div *ngIf="errorMessage" class="alert alert-error" role="alert">
+      ⚠ {{ errorMessage }}
+      <button class="alert-close" (click)="errorMessage = ''">✕</button>
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success" role="status">
+      ✓ {{ successMessage }}
+    </div>
+
+    <!-- Skeleton -->
+    <app-skeleton-loader *ngIf="loading" [rowCount]="pageSize"></app-skeleton-loader>
+
+    <!-- Table -->
+    <div class="table-wrapper" *ngIf="!loading">
+      <table class="products-table" *ngIf="pagedProducts.length > 0; else emptyState">
+        <thead>
+          <tr>
+            <th>Logo</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Fecha Liberación</th>
+            <th>Fecha Revisión</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of pagedProducts">
+            <td class="td-logo">
+              <img
+                [src]="product.logo"
+                [alt]="'Logo ' + product.name"
+                class="product-logo"
+                (error)="$any($event.target).src = 'assets/placeholder.png'"
+              />
+            </td>
+            <td class="td-name">{{ product.name }}</td>
+            <td class="td-desc">{{ product.description }}</td>
+            <td>{{ product.date_release | date:'dd/MM/yyyy' }}</td>
+            <td>{{ product.date_revision | date:'dd/MM/yyyy' }}</td>
+            <td class="td-actions">
+              <div class="dropdown-wrapper">
+                <button
+                  class="btn-menu"
+                  (click)="toggleDropdown(product.id, $event)"
+                  [attr.aria-expanded]="openDropdownId === product.id"
+                  [attr.aria-label]="'Acciones para ' + product.name"
+                  [id]="'btn-menu-' + product.id"
+                >
+                  ⋮
+                </button>
+                <div
+                  class="dropdown-menu"
+                  *ngIf="openDropdownId === product.id"
+                  role="menu"
+                >
+                  <button
+                    class="dropdown-item"
+                    role="menuitem"
+                    (click)="goToEdit(product, $event)"
+                    [id]="'btn-edit-' + product.id"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    class="dropdown-item danger"
+                    role="menuitem"
+                    (click)="openDeleteModal(product, $event)"
+                    [id]="'btn-delete-' + product.id"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Empty state -->
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <div class="empty-icon">📋</div>
+          <p>No se encontraron productos financieros.</p>
+          <small *ngIf="searchTerm">Intenta con otro término de búsqueda.</small>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Counter -->
+    <div class="results-counter" *ngIf="!loading">
+      <span>{{ pagedProducts.length }} resultado{{ pagedProducts.length !== 1 ? 's' : '' }}</span>
+      <span *ngIf="filteredProducts.length > pageSize" class="total-hint">
+        de {{ filteredProducts.length }}
+      </span>
+    </div>
+  </main>
+
+  <!-- Delete modal (F6) -->
+  <app-confirm-modal
+    [productName]="selectedProduct?.name || ''"
+    [isVisible]="!!selectedProduct"
+    (confirmed)="onDeleteConfirmed()"
+    (cancelled)="onDeleteCancelled()"
+  ></app-confirm-modal>
+</div>
