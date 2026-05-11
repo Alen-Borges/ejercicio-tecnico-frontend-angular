@@ -23,8 +23,12 @@ export class ProductListComponent implements OnInit {
   pageSize = 5;
   pageSizes = [5, 10, 20];
 
+  // Pagination
+  currentPage = 1;
+
   // F5/F6 — Dropdown + modal
   openDropdownId: string | null = null;
+  dropdownPosition = { top: 0, right: 0 };
   selectedProduct: Product | null = null;
 
   constructor(
@@ -63,16 +67,31 @@ export class ProductListComponent implements OnInit {
   }
 
   // F3 — paged
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredProducts.length / this.pageSize));
+  }
+
   get pagedProducts(): Product[] {
-    return this.filteredProducts.slice(0, this.pageSize);
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredProducts.slice(start, start + this.pageSize);
   }
 
   onSearchChange(value: string): void {
     this.searchTerm = value;
+    this.currentPage = 1;
   }
 
   onPageSizeChange(value: string): void {
     this.pageSize = Number(value);
+    this.currentPage = 1;
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) this.currentPage++;
   }
 
   // F4 — Navigate to add
@@ -83,7 +102,19 @@ export class ProductListComponent implements OnInit {
   // F5 — Dropdown toggle
   toggleDropdown(id: string, event: MouseEvent): void {
     event.stopPropagation();
-    this.openDropdownId = this.openDropdownId === id ? null : id;
+    if (this.openDropdownId === id) {
+      this.openDropdownId = null;
+    } else {
+      const btn = event.currentTarget as HTMLElement | null;
+      if (btn) {
+        const rect = btn.getBoundingClientRect();
+        this.dropdownPosition = {
+          top: rect.bottom + 4,
+          right: window.innerWidth - rect.right
+        };
+      }
+      this.openDropdownId = id;
+    }
   }
 
   @HostListener('document:click')
@@ -124,6 +155,21 @@ export class ProductListComponent implements OnInit {
 
   onDeleteCancelled(): void {
     this.selectedProduct = null;
+  }
+
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    // Remove the error handler FIRST to prevent an infinite loop
+    // if the fallback itself fails to load
+    img.onerror = null;
+    img.src =
+      'data:image/svg+xml;utf8,' +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">' +
+        '<rect width="48" height="48" rx="8" fill="#e2e8f0"/>' +
+        '<text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" ' +
+        'font-size="22" fill="#94a3b8">🖼</text></svg>'
+      );
   }
 
   private showSuccess(msg: string): void {

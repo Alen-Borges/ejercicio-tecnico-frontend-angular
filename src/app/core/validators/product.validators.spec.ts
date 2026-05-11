@@ -1,5 +1,3 @@
-import 'zone.js';
-import 'zone.js/testing';
 import {
   minTodayValidator,
   reviseDateValidator,
@@ -53,6 +51,7 @@ describe('reviseDateValidator', () => {
       date_release: new FormControl(release),
       date_revision: new FormControl(revision, reviseDateValidator('date_release'))
     });
+    group.get('date_revision')?.updateValueAndValidity();
     return group;
   };
 

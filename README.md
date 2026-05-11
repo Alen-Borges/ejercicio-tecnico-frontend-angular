@@ -1,28 +1,52 @@
-# FinancialProducts
+# Gestión de Productos Financieros - Ejercicio Técnico Angular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.13.
+Este proyecto es una aplicación de gestión de productos financieros construida con Angular 14.
 
-## Development server
+## 🚀 Funcionalidades Implementadas (Nivel Semi-Senior)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **F1. Listado de Productos Financieros:** Visualización de productos con estados de carga (skeletons) y manejo de errores locales.
+- **F2. Búsqueda:** Filtrado en tiempo real por nombre y descripción.
+- **F3. Paginación y Tamaño de Página:** Registros configurables por página (5, 10, 20) con controles de navegación.
+- **F4. Agregar Producto:** Formulario de registro completo con validaciones personalizadas síncronas y asíncronas.
+- **F5. Editar Producto:** Menú desplegable contextual para editar productos existentes (campo ID deshabilitado).
+- **F6. Eliminar Producto:** Modal de confirmación antes de la eliminación permanente.
 
-## Code scaffolding
+## 🛠 Tecnologías Utilizadas
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Angular 14**
+- **TypeScript 4.7**
+- **Jest** (Pruebas unitarias y Cobertura)
+- **Vanilla CSS/SCSS** (Sin frameworks de UI externos)
+- **Diseño Responsivo** (Optimizado para móviles y escritorio)
 
-## Build
+## 📦 Configuración y Ejecución
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### 1. Configuración del Backend
+1. Descomprima el archivo `repo-interview-main.zip` proporcionado en el reto.
+2. Abra una terminal en esa carpeta.
+3. Ejecute `npm install`.
+4. Inicie la API con `npm run start:dev`.
+5. El servicio estará disponible en `http://localhost:3002`.
 
-## Running unit tests
+### 2. Configuración del Frontend
+1. Clone este repositorio o abra la carpeta del proyecto.
+2. Ejecute `npm install`.
+3. Ejecute `npm start` para iniciar el servidor de desarrollo.
+4. Navegue a `http://localhost:4200/`.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 🧪 Pruebas Unitarias
 
-## Running end-to-end tests
+El proyecto utiliza **Jest** para las pruebas unitarias, cubriendo servicios, componentes, pipes y validadores personalizados.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- **Ejecutar todas las pruebas:** `npm test`
+- **Ejecutar pruebas con cobertura:** `npm run test:coverage`
+- **Modo observador (watch):** `npm run test:watch`
 
-## Further help
+**Cobertura Actual:** ~89% (Requerimiento: >70%)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-# ejercicio-tecnico-frontend-angular
+## 📋 Buenas Prácticas y Decisiones de Diseño
+
+- **Principios SOLID:** Aplicados en toda la arquitectura (Responsabilidad Única en servicios y componentes).
+- **Clean Code:** Nombramiento semántico, modularidad y funciones enfocadas.
+- **Experiencia de Usuario (UX):** Manejo optimizado de errores en imágenes y cargadores animados (skeletons).
+- **Escalabilidad:** Módulo Core para servicios singleton y Módulo Shared para componentes y pipes reutilizables.

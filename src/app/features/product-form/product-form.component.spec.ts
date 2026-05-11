@@ -1,5 +1,3 @@
-import 'zone.js';
-import 'zone.js/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -112,6 +110,10 @@ describe('ProductFormComponent — Add mode', () => {
     component.form.get('date_release')!.setValue(rel);
     const expectedRevision = nextYear(rel);
     expect(component.form.get('date_revision')!.value).toBe(expectedRevision);
+  });
+
+  it('date_revision — should be disabled', () => {
+    expect(component.form.get('date_revision')!.disabled).toBe(true);
   });
 
   it('should not submit when form is invalid', () => {
