@@ -1,175 +1,52 @@
-# Banking API — Microservicios
+# Gestión de Productos Financieros - Ejercicio Técnico Angular
 
-Sistema bancario con dos microservicios para gestión de clientes, cuentas y movimientos.
+Este proyecto es una aplicación de gestión de productos financieros construida con Angular 14.
 
----
+## 🚀 Funcionalidades Implementadas (Nivel Semi-Senior)
 
-## ¿Qué necesitás para correrlo?
+- **F1. Listado de Productos Financieros:** Visualización de productos con estados de carga (skeletons) y manejo de errores locales.
+- **F2. Búsqueda:** Filtrado en tiempo real por nombre y descripción.
+- **F3. Paginación y Tamaño de Página:** Registros configurables por página (5, 10, 20) con controles de navegación.
+- **F4. Agregar Producto:** Formulario de registro completo con validaciones personalizadas síncronas y asíncronas.
+- **F5. Editar Producto:** Menú desplegable contextual para editar productos existentes (campo ID deshabilitado).
+- **F6. Eliminar Producto:** Modal de confirmación antes de la eliminación permanente.
 
-- Docker instalado y corriendo
-- Nada más.
+## 🛠 Tecnologías Utilizadas
 
----
+- **Angular 14**
+- **TypeScript 4.7**
+- **Jest** (Pruebas unitarias y Cobertura)
+- **Vanilla CSS/SCSS** (Sin frameworks de UI externos)
+- **Diseño Responsivo** (Optimizado para móviles y escritorio)
 
-## Cómo levantar el proyecto
+## 📦 Configuración y Ejecución
 
-```bash
-git clone <URL_DEL_REPOSITORIO>
-cd ejercicio-tecnico-backend-2
-docker compose up --build
-```
+### 1. Configuración del Backend
+1. Descomprima el archivo `repo-interview-main.zip` proporcionado en el reto.
+2. Abra una terminal en esa carpeta.
+3. Ejecute `npm install`.
+4. Inicie la API con `npm run start:dev`.
+5. El servicio estará disponible en `http://localhost:3002`.
 
-La primera vez tarda unos minutos. Cuando veas que ambos servicios arrancan sin errores, el sistema está listo.
+### 2. Configuración del Frontend
+1. Clone este repositorio o abra la carpeta del proyecto.
+2. Ejecute `npm install`.
+3. Ejecute `npm start` para iniciar el servidor de desarrollo.
+4. Navegue a `http://localhost:4200/`.
 
----
+## 🧪 Pruebas Unitarias
 
-## URLs disponibles
+El proyecto utiliza **Jest** para las pruebas unitarias, cubriendo servicios, componentes, pipes y validadores personalizados.
 
-| Servicio | URL |
-|---|---|
-| API Clientes | http://localhost:8081 |
-| API Cuentas y Movimientos | http://localhost:8082 |
-| RabbitMQ (panel web) | http://localhost:15672 (usuario: `guest`, contraseña: `guest`) |
+- **Ejecutar todas las pruebas:** `npm test`
+- **Ejecutar pruebas con cobertura:** `npm run test:coverage`
+- **Modo observador (watch):** `npm run test:watch`
 
----
+**Cobertura Actual:** ~89% (Requerimiento: >70%)
 
-## Cómo probar los endpoints
+## 📋 Buenas Prácticas y Decisiones de Diseño
 
-Importá el archivo `Banking_API_Consolidada.postman_collection.json` en Postman.
-
-Antes de correr los requests, creá un **entorno** en Postman con estas dos variables:
-
-| Variable | Valor |
-|---|---|
-| `baseUrlClientes` | `http://localhost:8081` |
-| `baseUrlCuentas` | `http://localhost:8082` |
-
-La colección ya tiene todos los requests ordenados en un flujo lógico: primero creás clientes, luego cuentas, después movimientos, y por último consultás reportes.
-
----
-
-## Endpoints disponibles
-
-### Clientes — `http://localhost:8081`
-
-```
-GET    /clientes           → lista todos
-GET    /clientes/{id}      → trae uno por ID
-POST   /clientes           → crea uno
-PUT    /clientes/{id}      → actualiza
-DELETE /clientes/{id}      → elimina
-```
-
-**Crear cliente:**
-```json
-POST /clientes
-{
-  "nombre": "Jose Lema",
-  "genero": "Masculino",
-  "edad": 35,
-  "identificacion": "1234567890",
-  "direccion": "Otavalo sn y principal",
-  "telefono": "098254785",
-  "contrasena": "1234",
-  "estado": true
-}
-```
-
----
-
-### Cuentas — `http://localhost:8082`
-
-```
-GET    /cuentas            → lista todas
-GET    /cuentas/{id}       → trae una por ID
-POST   /cuentas            → crea una
-PUT    /cuentas/{id}       → actualiza
-DELETE /cuentas/{id}       → elimina
-```
-
-**Crear cuenta:**
-```json
-POST /cuentas
-{
-  "numeroCuenta": "478758",
-  "tipoCuenta": "Ahorros",
-  "saldoInicial": 2000,
-  "estado": true,
-  "clienteId": 1
-}
-```
-
----
-
-### Movimientos — `http://localhost:8082`
-
-```
-GET    /movimientos        → lista todos
-POST   /movimientos        → registra uno nuevo
-```
-
-**Registrar un retiro** (valor negativo):
-```json
-POST /movimientos
-{
-  "numeroCuenta": "478758",
-  "valor": -575
-}
-```
-
-**Registrar un depósito** (valor positivo):
-```json
-POST /movimientos
-{
-  "numeroCuenta": "478758",
-  "valor": 600
-}
-```
-
-Si no hay saldo suficiente para el retiro, el sistema responde:
-```json
-HTTP 400
-{ "message": "Saldo no disponible" }
-```
-
----
-
-### Reportes — `http://localhost:8082`
-
-```
-GET /reportes?fecha=YYYY-MM-DD,YYYY-MM-DD&cliente={id}
-```
-
-**Ejemplo:**
-```
-GET /reportes?fecha=2024-01-01,2024-12-31&cliente=1
-```
-
-**Respuesta:**
-```json
-[
-  {
-    "fecha": "10/02/2024",
-    "cliente": "Marianela Montalvo",
-    "numeroCuenta": "225487",
-    "tipo": "Corriente",
-    "saldoInicial": 100,
-    "estado": true,
-    "movimiento": 600,
-    "saldoDisponible": 700
-  }
-]
-```
-
----
-
-## Cómo bajar el proyecto
-
-```bash
-docker compose down
-```
-
-Para borrar también los datos de la base:
-```bash
-docker compose down -v
-```
+- **Principios SOLID:** Aplicados en toda la arquitectura (Responsabilidad Única en servicios y componentes).
+- **Clean Code:** Nombramiento semántico, modularidad y funciones enfocadas.
+- **Experiencia de Usuario (UX):** Manejo optimizado de errores en imágenes y cargadores animados (skeletons).
+- **Escalabilidad:** Módulo Core para servicios singleton y Módulo Shared para componentes y pipes reutilizables.
