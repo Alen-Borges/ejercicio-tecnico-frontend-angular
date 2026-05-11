@@ -2,7 +2,7 @@
 
 Este proyecto es una aplicación de gestión de productos financieros construida con Angular 14.
 
-## 🚀 Funcionalidades Implementadas (Nivel Semi-Senior)
+## 🚀 Funcionalidades Implementadas
 
 - **F1. Listado de Productos Financieros:** Visualización de productos con estados de carga (skeletons) y manejo de errores locales.
 - **F2. Búsqueda:** Filtrado en tiempo real por nombre y descripción.
